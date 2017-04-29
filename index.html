@@ -2,10 +2,28 @@
   <head>
     <title>Venn Diagram Generator</title>
     <style>
-      .venn circle {
+      :root {
+        --width: 3px;
+        --colour: #BADA55;
+        --font-size: 64px;
+      }
+      body {
+        font-family: 'helvetica neue', arial, sans-serif;
+      }
+      .venn .circle {
         fill: transparent;
-        stroke: #BADA55;
+        stroke: var(--colour);
+        stroke-width: var(--width);
+      }
+      .venn .guide {
         stroke-width: 1px;
+        stroke: black;
+      }
+      .venn text {
+        fill: var(--colour);
+        font-size: var(--font-size);
+        text-anchor: middle;
+        alignment-baseline: middle;
       }
       /*.right {
         stroke: red;
@@ -21,51 +39,124 @@
   <body>
     <label for="spacing">Spacing</label>
     <input id="spacing" type="range" name="spacing" min=0 max=500 value=200/>
+
     <label for="thickness">Thickness</label>
-    <input id="thickness" type="range" name="thickness" min=1 max=30 value=3/>
+    <input id="thickness" type="range" name="width" min=1 max=50 value=3 class="css-input" data-sizing="px"/>
+
+    <label for="radius">Radius</label>
+    <input id="radius" type="range" name="radius" min=1 max=500 value=200 class="css-input"  />
+
+    <label for="font-size">Font Size</label>
+    <input id="font-size" type="range" name="font-size" min=16 max=200 value=32 data-sizing="px" class="css-input" />
+
+    <label for="text-spacing">Text Spacing</label>
+    <input id="text-spacing" type="range" name="text-spacing" min=0 max=500 value=200/>
+
+
     <svg class="venn" viewBox="0 0 1000 1000">
-      <circle class="top"   cx="500" cy="500" r="200" />
-      <circle class="left"  cx="500" cy="500" r="200" />
-      <circle class="right" cx="500" cy="500" r="200" />
+      <circle class="circle top" />
+      <circle class="circle left" />
+      <circle class="circle right"/>
+
+      <text class="text-top">G</text>
+      <text class="text-left">S</text>
+      <text class="text-right">C</text>
+      <text class="text-middle">F</text>
+
+      <circle cx="500" cy="500" r="3" class="guide"/>
+      <line x1="0" y1="500" x2="1000" y2="500" class="guide"/>
+      <line x1="500" y1="0" x2="500" y2="1000" class="guide"/>
     </svg>
 
 <script>
 
 // Grab the venn bits and pieces
-const venn   = document.querySelector('.venn');
+const venn    = document.querySelector('.venn');
+const circles = document.querySelectorAll('.venn .circle');
+
 const cTop   = document.querySelector('.top');
 const cLeft  = document.querySelector('.left');
 const cRight = document.querySelector('.right');
-const spacingEle = document.querySelector('#spacing');
 
+const tTop   = document.querySelector('.text-top');
+const tLeft  = document.querySelector('.text-left');
+const tRight = document.querySelector('.text-right');
+const tMiddle = document.querySelector('.text-middle');
+
+// Grab the form controls
+const spacingInput = document.querySelector('#spacing');
+const textSpacingInput = document.querySelector('#text-spacing');
+const radiusInput = document.querySelector('#radius');
+const cssInputs = document.querySelectorAll('.css-input');
+
+// Set the centre (replace dynamically later)
 const [centerX, centerY] = [500, 500];
 
+// Initial spacing value
 let spacing = 20;
+let textSpacing = 20;
+let radius = 10;
 
 function triangleHeight(w) {
+  // Thanks, Pythagoras
   return Math.sqrt(Math.pow(w, 2) - Math.pow(w/2, 2))
 };
 
 function setSpacing() {
-  xSpacing = parseInt(spacingEle.value);
-  ySpacing = triangleHeight(xSpacing)
-  cLeft.setAttribute('cx', centerX - xSpacing / 2);
-  cLeft.setAttribute('cy', centerY + ySpacing / 2);
+  const xSpacing = parseInt(spacingInput.value);
+  const ySpacing = triangleHeight(xSpacing);
+
+  const xTextSpacing = parseInt(textSpacingInput.value);
+  const yTextSpacing = triangleHeight(xTextSpacing);
+
+  cLeft.setAttribute('cx', (centerX - xSpacing / 2) * (1 / 3));
+  cLeft.setAttribute('cy', (centerY + ySpacing / 2) * (1 / 3));
+  tLeft.setAttribute('x', centerX - xTextSpacing / 2);
+  tLeft.setAttribute('y', centerY + yTextSpacing / 2);
+
   cRight.setAttribute('cx', centerX + xSpacing / 2);
   cRight.setAttribute('cy', centerY + ySpacing / 2);
-  cTop.setAttribute('cx', centerX)
-  cTop.setAttribute('cy', centerY - ySpacing / 2)
+  tRight.setAttribute('x', centerX + xTextSpacing / 2);
+  tRight.setAttribute('y', centerY + yTextSpacing / 2);
+
+  cTop.setAttribute('cx', centerX * (2 / 3));
+  cTop.setAttribute('cy', (centerY - ySpacing / 2) * (2/3));
+  tTop.setAttribute('x', centerX);
+  tTop.setAttribute('y', centerY - yTextSpacing / 2);
+
+  tMiddle.setAttribute('x', centerX);
+  tMiddle.setAttribute('y', centerY);
 }
 
-function setThickness() {
+function setRadius() {
+  const radius = parseInt(radiusInput.value);
+  circles.forEach(circle => circle.setAttribute('r', radius));
+}
 
+function cssUpdate() {
+  const suffix = this.dataset.sizing || '';
+  document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
 }
 
 
 // Input stuff
-spacingEle.addEventListener('change', setSpacing);
-spacingEle.addEventListener('mousemove', setSpacing);
+spacingInput.addEventListener('change', setSpacing);
+spacingInput.addEventListener('mousemove', setSpacing);
 setSpacing();
+
+textSpacingInput.addEventListener('change', setSpacing);
+textSpacingInput.addEventListener('mousemove', setSpacing);
+setSpacing();
+
+radiusInput.addEventListener('change', setRadius);
+radiusInput.addEventListener('mousemove', setRadius);
+setSpacing();
+
+cssInputs.forEach(input => input.addEventListener('change', cssUpdate));
+cssInputs.forEach(input => input.addEventListener('mousemove', cssUpdate));
+
+setSpacing();
+setRadius();
 
 </script>
 
