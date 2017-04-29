@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Venn Diagram Generator</title>
+    <style>
+      .venn circle {
+        fill: transparent;
+        stroke: #BADA55;
+        stroke-width: 1px;
+      }
+      /*.right {
+        stroke: red;
+      }
+      .top {
+        stroke: green;
+      }
+      .left {
+        stroke: blue;
+      }*/
+    </style>
+  </head>
+  <body>
+    <label for="spacing">Spacing</label>
+    <input id="spacing" type="range" name="spacing" min=0 max=500 value=200/>
+    <label for="thickness">Thickness</label>
+    <input id="thickness" type="range" name="thickness" min=1 max=30 value=3/>
+    <svg class="venn" viewBox="0 0 1000 1000">
+      <circle class="top"   cx="500" cy="500" r="200" />
+      <circle class="left"  cx="500" cy="500" r="200" />
+      <circle class="right" cx="500" cy="500" r="200" />
+    </svg>
+
+<script>
+
+// Grab the venn bits and pieces
+const venn   = document.querySelector('.venn');
+const cTop   = document.querySelector('.top');
+const cLeft  = document.querySelector('.left');
+const cRight = document.querySelector('.right');
+const spacingEle = document.querySelector('#spacing');
+
+const [centerX, centerY] = [500, 500];
+
+let spacing = 20;
+
+function triangleHeight(w) {
+  return Math.sqrt(Math.pow(w, 2) - Math.pow(w/2, 2))
+};
+
+function setSpacing() {
+  spacing = parseInt(spacingEle.value);
+  cLeft.setAttribute('cx', centerX - spacing / 2);
+  cLeft.setAttribute('cy', centerY);
+  cRight.setAttribute('cx', centerX + spacing);
+  cRight.setAttribute('cy', centerY);
+  cTop.setAttribute('cx', centerX + spacing / 2)
+  cTop.setAttribute('cy', centerY - triangleHeight(spacing))
+}
+
+function setThickness() {
+
+}
+
+
+// Input stuff
+spacingEle.addEventListener('change', setSpacing);
+spacingEle.addEventListener('mousemove', setSpacing);
+setSpacing();
+
+</script>
+
+  </body>
+</html>
