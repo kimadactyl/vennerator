@@ -8,7 +8,10 @@
         --font-size: 64px;
       }
       body {
-        font-family: 'helvetica neue', arial, sans-serif;
+        font-family: 'helvetica', arial, sans-serif;
+      }
+      svg {
+        display: block
       }
       .venn .circle {
         fill: transparent;
@@ -18,6 +21,7 @@
       .venn .guide {
         stroke-width: 1px;
         stroke: black;
+        /*display: none;*/
       }
       .venn text {
         fill: var(--colour);
@@ -37,20 +41,22 @@
     </style>
   </head>
   <body>
-    <label for="spacing">Spacing</label>
-    <input id="spacing" type="range" name="spacing" min=0 max=500 value=200/>
+    <fieldset>
+      <label for="spacing">Circle Spacing</label>
+      <input id="spacing" type="range" name="spacing" min=0 max=1500 value=100/>
 
-    <label for="thickness">Thickness</label>
-    <input id="thickness" type="range" name="width" min=1 max=50 value=3 class="css-input" data-sizing="px"/>
+      <label for="thickness">Thickness</label>
+      <input id="thickness" type="range" name="width" min=1 max=50 value=3 class="css-input" data-sizing="px"/>
 
-    <label for="radius">Radius</label>
-    <input id="radius" type="range" name="radius" min=1 max=500 value=200 class="css-input"  />
+      <label for="radius">Radius</label>
+      <input id="radius" type="range" name="radius" min=1 max=500 value=200 class="css-input"  />
 
-    <label for="font-size">Font Size</label>
-    <input id="font-size" type="range" name="font-size" min=16 max=200 value=32 data-sizing="px" class="css-input" />
+      <label for="font-size">Font Size</label>
+      <input id="font-size" type="range" name="font-size" min=16 max=200 value=32 data-sizing="px" class="css-input" />
 
-    <label for="text-spacing">Text Spacing</label>
-    <input id="text-spacing" type="range" name="text-spacing" min=0 max=500 value=200/>
+      <label for="text-spacing">Text Spacing</label>
+      <input id="text-spacing" type="range" name="text-spacing" min=0 max=500 value=200/>
+    </fieldset>
 
 
     <svg class="venn" viewBox="0 0 1000 1000">
@@ -109,20 +115,22 @@ function setSpacing() {
   const xTextSpacing = parseInt(textSpacingInput.value);
   const yTextSpacing = triangleHeight(xTextSpacing);
 
-  cLeft.setAttribute('cx', (centerX - xSpacing / 2) * (1 / 3));
-  cLeft.setAttribute('cy', (centerY + ySpacing / 2) * (1 / 3));
-  tLeft.setAttribute('x', centerX - xTextSpacing / 2);
-  tLeft.setAttribute('y', centerY + yTextSpacing / 2);
+  cLeft.setAttribute('cx', centerX - (xSpacing / 2));
+  cLeft.setAttribute('cy', centerY + (ySpacing / 2));
+  tLeft.setAttribute('x', centerX - (xTextSpacing / 2));
+  tLeft.setAttribute('y', centerY + (yTextSpacing / 2));
 
-  cRight.setAttribute('cx', centerX + xSpacing / 2);
-  cRight.setAttribute('cy', centerY + ySpacing / 2);
-  tRight.setAttribute('x', centerX + xTextSpacing / 2);
-  tRight.setAttribute('y', centerY + yTextSpacing / 2);
+  cRight.setAttribute('cx', centerX + (xSpacing / 2));
+  cRight.setAttribute('cy', centerY + (ySpacing / 2));
+  tRight.setAttribute('x', centerX + (xTextSpacing / 2));
+  tRight.setAttribute('y', centerY + (yTextSpacing / 2));
 
-  cTop.setAttribute('cx', centerX * (2 / 3));
-  cTop.setAttribute('cy', (centerY - ySpacing / 2) * (2/3));
+  cTop.setAttribute('cx', centerX);
+  cTop.setAttribute('cy', centerY - (ySpacing / 2));
   tTop.setAttribute('x', centerX);
-  tTop.setAttribute('y', centerY - yTextSpacing / 2);
+  tTop.setAttribute('y', centerY - (yTextSpacing / 2));
+
+  // const midPointX = cLeft.getAttribute('cx')
 
   tMiddle.setAttribute('x', centerX);
   tMiddle.setAttribute('y', centerY);
