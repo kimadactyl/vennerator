@@ -47,13 +47,14 @@ function triangleHeight(w) {
 };
 
 function setSpacing() {
-  spacing = parseInt(spacingEle.value);
-  cLeft.setAttribute('cx', centerX - spacing / 2);
-  cLeft.setAttribute('cy', centerY);
-  cRight.setAttribute('cx', centerX + spacing);
-  cRight.setAttribute('cy', centerY);
-  cTop.setAttribute('cx', centerX + spacing / 2)
-  cTop.setAttribute('cy', centerY - triangleHeight(spacing))
+  xSpacing = parseInt(spacingEle.value);
+  ySpacing = triangleHeight(xSpacing)
+  cLeft.setAttribute('cx', centerX - xSpacing / 2);
+  cLeft.setAttribute('cy', centerY + ySpacing / 2);
+  cRight.setAttribute('cx', centerX + xSpacing / 2);
+  cRight.setAttribute('cy', centerY + ySpacing / 2);
+  cTop.setAttribute('cx', centerX)
+  cTop.setAttribute('cy', centerY - ySpacing / 2)
 }
 
 function setThickness() {
