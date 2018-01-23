@@ -76,18 +76,37 @@
 
 <script>
 
+function Circle(element) {
+  this.element = element;
+}
+
+function Text(element) {
+  this.element = element;
+}
+
+Circle.prototype.setCentre = function(x, y) {
+  this.element.setAttribute('cx', x);
+  this.element.setAttribute('cy', y);
+}
+
+Text.prototype.setCentre = function(x, y) {
+  this.element.setAttribute('x', x);
+  this.element.setAttribute('y', y);
+}
+
+
 // Grab the venn bits and pieces
 const venn    = document.querySelector('.venn');
 const circles = document.querySelectorAll('.venn .circle');
 
-const cTop   = document.querySelector('.top');
-const cLeft  = document.querySelector('.left');
-const cRight = document.querySelector('.right');
+const cTop   = new Circle(document.querySelector('.top'));
+const cLeft  = new Circle(document.querySelector('.left'));
+const cRight = new Circle(document.querySelector('.right'));
 
-const tTop   = document.querySelector('.text-top');
-const tLeft  = document.querySelector('.text-left');
-const tRight = document.querySelector('.text-right');
-const tMiddle = document.querySelector('.text-middle');
+const tTop   = new Text(document.querySelector('.text-top'));
+const tLeft  = new Text(document.querySelector('.text-left'));
+const tRight = new Text(document.querySelector('.text-right'));
+const tMiddle = new Text(document.querySelector('.text-middle'));
 
 // Grab the form controls
 const spacingInput = document.querySelector('#spacing');
@@ -122,17 +141,16 @@ function setSpacing() {
   const xTextSpacing = parseInt(textSpacingInput.value);
   const yTextSpacing = triangleHeight(xTextSpacing);
 
-  setCentre(cLeft, centerX - (xSpacing / 2), centerY + (ySpacing / 3))
-  setCentre(tLeft, centerX - (xTextSpacing / 2), centerY + (yTextSpacing / 3))
+  cLeft.setCentre(centerX - (xSpacing / 2), centerY + (ySpacing / 3))
+  tLeft.setCentre(centerX - (xTextSpacing / 2), centerY + (yTextSpacing / 3))
 
-  setCentre(cRight, centerX + (xSpacing / 2), centerY + (ySpacing / 3))
-  setCentre(tRight, centerX + (xTextSpacing / 2), centerY + (yTextSpacing / 3))
+  cRight.setCentre(centerX + (xSpacing / 2), centerY + (ySpacing / 3))
+  tRight.setCentre(centerX + (xTextSpacing / 2), centerY + (yTextSpacing / 3))
 
-  setCentre(cTop, centerX, centerY - (ySpacing * 2 / 3))
-  setCentre(tTop, centerX, centerY - (yTextSpacing * 2 / 3))
+  cTop.setCentre(centerX, centerY - (ySpacing * 2 / 3))
+  tTop.setCentre(centerX, centerY - (yTextSpacing * 2 / 3))
 
-  tMiddle.setAttribute('x', centerX);
-  tMiddle.setAttribute('y', centerY);
+  tMiddle.setCentre(centerX, centerY);
 }
 
 function setRadius() {
