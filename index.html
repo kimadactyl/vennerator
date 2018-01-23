@@ -127,13 +127,6 @@ function triangleHeight(w) {
   return Math.sqrt(Math.pow(w, 2) - Math.pow(w/2, 2))
 };
 
-function setCentre(obj, x, y) {
-  objType = obj.nodeName == 'circle' ? ['cx', 'cy'] : ['x', 'y']
-
-  obj.setAttribute(objType[0], x);
-  obj.setAttribute(objType[1], y);
-}
-
 function setSpacing() {
   const xSpacing = parseInt(spacingInput.value);
   const ySpacing = triangleHeight(xSpacing);
