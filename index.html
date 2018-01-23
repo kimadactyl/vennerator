@@ -108,6 +108,13 @@ function triangleHeight(w) {
   return Math.sqrt(Math.pow(w, 2) - Math.pow(w/2, 2))
 };
 
+function setCentre(obj, x, y) {
+  objType = obj.nodeName == 'circle' ? ['cx', 'cy'] : ['x', 'y']
+
+  obj.setAttribute(objType[0], x);
+  obj.setAttribute(objType[1], y);
+}
+
 function setSpacing() {
   const xSpacing = parseInt(spacingInput.value);
   const ySpacing = triangleHeight(xSpacing);
@@ -115,22 +122,14 @@ function setSpacing() {
   const xTextSpacing = parseInt(textSpacingInput.value);
   const yTextSpacing = triangleHeight(xTextSpacing);
 
-  cLeft.setAttribute('cx', centerX - (xSpacing / 2));
-  cLeft.setAttribute('cy', centerY + (ySpacing / 2));
-  tLeft.setAttribute('x', centerX - (xTextSpacing / 2));
-  tLeft.setAttribute('y', centerY + (yTextSpacing / 2));
+  setCentre(cLeft, centerX - (xSpacing / 2), centerY + (ySpacing / 3))
+  setCentre(tLeft, centerX - (xTextSpacing / 2), centerY + (yTextSpacing / 3))
 
-  cRight.setAttribute('cx', centerX + (xSpacing / 2));
-  cRight.setAttribute('cy', centerY + (ySpacing / 2));
-  tRight.setAttribute('x', centerX + (xTextSpacing / 2));
-  tRight.setAttribute('y', centerY + (yTextSpacing / 2));
+  setCentre(cRight, centerX + (xSpacing / 2), centerY + (ySpacing / 3))
+  setCentre(tRight, centerX + (xTextSpacing / 2), centerY + (yTextSpacing / 3))
 
-  cTop.setAttribute('cx', centerX);
-  cTop.setAttribute('cy', centerY - (ySpacing / 2));
-  tTop.setAttribute('x', centerX);
-  tTop.setAttribute('y', centerY - (yTextSpacing / 2));
-
-  // const midPointX = cLeft.getAttribute('cx')
+  setCentre(cTop, centerX, centerY - (ySpacing * 2 / 3))
+  setCentre(tTop, centerX, centerY - (yTextSpacing * 2 / 3))
 
   tMiddle.setAttribute('x', centerX);
   tMiddle.setAttribute('y', centerY);
